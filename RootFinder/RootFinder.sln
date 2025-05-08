@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35707.178 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RootFinder", "RootFinder\RootFinder.csproj", "{6A85FE4D-F5CC-4DBC-86D0-DD63AF447C10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RootFinder.BusinessLayer", "RootFinder.BLL\RootFinder.BusinessLayer\RootFinder.BusinessLayer.csproj", "{2AB4B5FB-04DC-41E3-B2F2-339F5A14CDB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6A85FE4D-F5CC-4DBC-86D0-DD63AF447C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A85FE4D-F5CC-4DBC-86D0-DD63AF447C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A85FE4D-F5CC-4DBC-86D0-DD63AF447C10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AB4B5FB-04DC-41E3-B2F2-339F5A14CDB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AB4B5FB-04DC-41E3-B2F2-339F5A14CDB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AB4B5FB-04DC-41E3-B2F2-339F5A14CDB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AB4B5FB-04DC-41E3-B2F2-339F5A14CDB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
