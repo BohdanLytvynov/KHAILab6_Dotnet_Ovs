@@ -127,6 +127,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\StringToDoubleConverter.cs" />
     <Compile Include="EventArgs\FunctionEventArgs.cs" />
     <Compile Include="ViewModels\Base\Commands\Command.cs" />
     <Compile Include="ViewModels\Base\Commands\CommandBase.cs" />

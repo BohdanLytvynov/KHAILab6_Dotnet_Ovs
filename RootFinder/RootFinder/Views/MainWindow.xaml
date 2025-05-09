@@ -6,9 +6,17 @@
         xmlns:local="clr-namespace:RootFinder"
         xmlns:mainVM="clr-namespace:RootFinder.ViewModels"
         xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:strToDouble="clr-namespace:RootFinder.Converters"
         mc:Ignorable="d"
-        Title="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Height="450" Width="800"
+        Title="{Binding Title, UpdateSourceTrigger=PropertyChanged}" 
+        MinHeight="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Height, Mode=OneTime}" 
+        Height="580"
+        Width="800"
         d:DataContext="{d:DesignInstance mainVM:MainWindowViewModel, IsDesignTimeCreatable=True}">
+    <Window.Resources>
+        <strToDouble:StringToDoubleConverter x:Key="stringToDouble"/>
+    </Window.Resources>
+
     <Grid>
         <Grid x:Name="Main">
             <Grid.ColumnDefinitions>
@@ -46,7 +54,7 @@
 
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
                         <Label Content="XMax: " Style="{StaticResource InputTxtBoxLabel}"/>
-                        <TextBox MinWidth="150" Style="{StaticResource TxtBoxInputStyle}">
+                        <TextBox x:Name="Max" MinWidth="150" Style="{StaticResource TxtBoxInputStyle}">
                             <TextBox.Text>
                                 <Binding Path="XMaxStr" 
                      UpdateSourceTrigger="PropertyChanged"
@@ -109,12 +117,20 @@
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
                         <Label Content="eps: " Style="{StaticResource InputTxtBoxLabel}"/>
                         <Slider x:Name="epsSlider" MinWidth="150"
-                                Minimum="0.01" Maximum="100"/>
+                                Minimum="0.01" Maximum="{Binding ElementName= Max, Path=Text, 
+                            UpdateSourceTrigger=PropertyChanged, Converter={StaticResource stringToDouble}}"
+                                Value="{Binding Eps, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                IsEnabled="{Binding SliderEnabled, UpdateSourceTrigger=PropertyChanged}"
+                                />
                     </StackPanel>
                     <Label Margin="0,2,0,5" Style="{StaticResource InputTxtBoxLabel}"
                            HorizontalAlignment="Center" Content="{Binding ElementName=epsSlider, 
                         Path=Value, UpdateSourceTrigger=PropertyChanged}"
                            />
+
+                    <Button Content="About" FontSize="{StaticResource txtBoxInputFontSize}"
+                            Margin="40,20,40,20"
+                            Command="{Binding OnAboutButtonPressed}"/>
 
                     <Button Content="Draw Plot" FontSize="{StaticResource txtBoxInputFontSize}"
                             Margin="40,20,40,0"
@@ -134,7 +150,9 @@
                 <GridSplitter Style="{StaticResource HorizontalGridSplitterStile}"
                               Grid.Row="1"/>
                 <oxy:PlotView x:Name="Plot"/>
-                <TextBlock Grid.Row="2" Margin="5"/>
+                <TextBlock Grid.Row="2" Margin="5" 
+                           Text="{Binding Response, UpdateSourceTrigger=PropertyChanged}"
+                           TextWrapping="WrapWithOverflow"/>
             </Grid>
         </Grid>
     </Grid>

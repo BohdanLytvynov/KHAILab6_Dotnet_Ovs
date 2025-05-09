@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using RootFinder.BusinessLayer.Mathematics;
+using System.Windows;
 
 namespace RootFinder.ViewModels
 {
@@ -39,6 +41,10 @@ namespace RootFinder.ViewModels
         private double m_eps;
 
         private OxyPlot.Wpf.PlotView m_PlotView;
+
+        private string m_response;
+
+        private bool m_SliderEnabled;
         
         #endregion
 
@@ -86,6 +92,24 @@ namespace RootFinder.ViewModels
             get=>m_PlotView; 
             set=>Set(ref m_PlotView, value); 
         }
+
+        public double Eps 
+        {
+            get=>m_eps;
+            set=>Set(ref m_eps, value);
+        }
+
+        public string Response 
+        {
+            get=> m_response;
+            set=>Set(ref m_response, value);
+        }
+
+        public bool SliderEnabled 
+        { 
+            get=>m_SliderEnabled;
+            set => Set(ref m_SliderEnabled, value); 
+        }
         #endregion
 
         #region IData Error Info
@@ -102,7 +126,8 @@ namespace RootFinder.ViewModels
                         SetValidArrayValue(0, ValidationHelper.ValidateDoubleNumberInput(XMinStr, out error));
                         break;
                     case nameof(XMaxStr):
-                        SetValidArrayValue(1, ValidationHelper.ValidateDoubleNumberInput(XMinStr, out error));
+                        SliderEnabled = ValidationHelper.ValidateDoubleNumberInput(XMaxStr, out error);                        
+                        SetValidArrayValue(1, SliderEnabled);
                         break;
                     case nameof(AStr):
                         SetValidArrayValue(2, ValidationHelper.ValidateDoubleNumberInput(AStr, out error));
@@ -127,6 +152,8 @@ namespace RootFinder.ViewModels
         public ICommand OnDrawButtonPressed { get; }
 
         public ICommand OnGetResultButtonPressed { get; }
+
+        public ICommand OnAboutButtonPressed { get; }
         #endregion
 
         #region Ctor
@@ -144,6 +171,10 @@ namespace RootFinder.ViewModels
 
             m_inputValid = false;
             m_PlotView = new PlotView();
+            m_response = string.Empty;
+            m_SliderEnabled = false;
+
+            m_eps = 0.01;
             #endregion
 
             #region Init Commands
@@ -155,6 +186,11 @@ namespace RootFinder.ViewModels
             OnGetResultButtonPressed = new Command(
                 OnGetResultButtonPressedExecute,
                 CanOnGetResultButtonPressedExecute
+                );
+
+            OnAboutButtonPressed = new Command(
+                OnAboutButtonPressedExecute,
+                CanOnAboutButtonPressedExecute
                 );
             #endregion
         }
@@ -179,10 +215,49 @@ namespace RootFinder.ViewModels
         private bool CanOnGetResultButtonPressedExecute(object p) => m_inputValid;
 
         private void OnGetResultButtonPressedExecute(object p)
-        { 
-            
+        {
+            Response = string.Empty;
+
+            var res = MathHelper.GetRoots(Function, double.Parse(XMinStr),
+                double.Parse(XMaxStr), double.Parse(Dx), Eps);
+
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("Equation Roots: ");
+            int last = res.Count - 1;
+            int i = 0;
+            foreach (var r in res)
+            {
+                if (i == last)
+                {
+                    stringBuilder.Append($"{r}");
+                }
+                else
+                {
+                    stringBuilder.Append($"{r}, ");
+                }
+                
+                i++;
+            }
+
+            Response = stringBuilder.ToString();
+
+            stringBuilder.Clear();
         }
 
+        #endregion
+
+        #region On About Button Pressed
+
+        private bool CanOnAboutButtonPressedExecute(object p) => true;
+
+        private void OnAboutButtonPressedExecute(object p)
+        {
+            MessageBox.Show("Литивнов Богдан Юрійович 125 гр Варіант 2,9\n" +
+                "Метод повного перебора\n" +
+                "xmin=-15, xmax=10\r\n\r\na=-0.1,c=5\r\ny=a*x*x + Math::Sin(x+0.5)*x + c\n" +
+                "Завдання треба вирішити методом повного перебору", Title,
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
         #endregion
 
         private double Function(double x)
