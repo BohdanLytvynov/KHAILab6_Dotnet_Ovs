@@ -40,6 +40,13 @@ namespace RootFinder
 
                 var window = new MainWindow();
 
+                viewModel.OnDrawPlotButtonPressedEvent += window.DrawButtonPressed;
+
+
+                window.Closed += (object s, EventArgs e) =>
+                {
+                    viewModel.OnDrawPlotButtonPressedEvent -= window.DrawButtonPressed;
+                };
                 window.DataContext = viewModel;
                 viewModel.Dispatcher = window.Dispatcher;
 

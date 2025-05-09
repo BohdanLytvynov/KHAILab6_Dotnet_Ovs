@@ -133,9 +133,7 @@
                 </Grid.RowDefinitions>
                 <GridSplitter Style="{StaticResource HorizontalGridSplitterStile}"
                               Grid.Row="1"/>
-                <oxy:PlotView Model="{
-                    Binding Plot}">
-                </oxy:PlotView>
+                <oxy:PlotView x:Name="Plot"/>
                 <TextBlock Grid.Row="2" Margin="5"/>
             </Grid>
         </Grid>

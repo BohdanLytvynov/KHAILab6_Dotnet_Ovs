@@ -1,6 +1,8 @@
 ﻿using OxyPlot;
 using OxyPlot.Series;
+using OxyPlot.Wpf;
 using RootFinder.BusinessLayer.Validators;
+using RootFinder.EventArg;
 using RootFinder.ViewModels.Base.Commands;
 using RootFinder.ViewModels.Base.ViewModel;
 using System;
@@ -14,6 +16,10 @@ namespace RootFinder.ViewModels
 {
     internal class MainWindowViewModel : ViewModelBase
     {
+        #region Events
+        public EventHandler<FunctionEventArgs> OnDrawPlotButtonPressedEvent;
+        #endregion
+
         #region Fields
 
         private string m_title;
@@ -30,8 +36,10 @@ namespace RootFinder.ViewModels
 
         private string m_dx;
 
-        private PlotModel m_plotModel;
+        private double m_eps;
 
+        private OxyPlot.Wpf.PlotView m_PlotView;
+        
         #endregion
 
         #region Properties
@@ -73,9 +81,10 @@ namespace RootFinder.ViewModels
             set=>Set(ref m_dx, value); 
         }
 
-        public PlotModel Plot 
+        public PlotView PlotView 
         {
-            get; private set;
+            get=>m_PlotView; 
+            set=>Set(ref m_PlotView, value); 
         }
         #endregion
 
@@ -134,8 +143,7 @@ namespace RootFinder.ViewModels
             m_dx = string.Empty;
 
             m_inputValid = false;
-
-            m_plotModel = new PlotModel();
+            m_PlotView = new PlotView();
             #endregion
 
             #region Init Commands
@@ -160,11 +168,9 @@ namespace RootFinder.ViewModels
 
         private void OnDrawButtonPressedExecute(object p)
         {
-            Plot = new PlotModel() { Title = "My Func" };
-            Plot.Series.Add(new FunctionSeries(Function, 
-                double.Parse(XMinStr), double.Parse(XMaxStr), double.Parse(Dx), 
-                "Function"));
-            Plot.InvalidatePlot(true);
+            this.OnDrawPlotButtonPressedEvent?.Invoke(this, 
+                new FunctionEventArgs(Function, double.Parse(XMinStr),
+                double.Parse(XMaxStr), double.Parse(Dx), "Some FUnction"));
         }
         #endregion
 

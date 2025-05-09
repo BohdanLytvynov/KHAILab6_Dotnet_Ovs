@@ -1,4 +1,8 @@
-﻿using System;
+﻿using OxyPlot;
+using OxyPlot.Series;
+using RootFinder.EventArg;
+using ScottPlot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +26,19 @@ namespace RootFinder
     {
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();           
+        }
+
+        public void DrawButtonPressed(object source, FunctionEventArgs args)
+        {
+            var model = new PlotModel() { Title = "Function for Investigation:" };
+
+            model.Series.Add(new FunctionSeries(args.Function, args.Xmin, 
+                args.Xmax, args.Dx, args.Name));
+
+            this.Plot.Model = model;
+
+            this.Plot.InvalidatePlot(true);
         }
     }
 }
